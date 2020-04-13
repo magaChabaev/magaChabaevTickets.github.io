@@ -1,25 +1,26 @@
-const path = require('path');
-const autoprefixer = require('autoprefixer');
-const precss = require('precss');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const autoprefixer = require("autoprefixer");
+const precss = require("precss");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   // Итак,  чтобы вебпак начал свою работу, нужно указать главный (основной) файл, который будет включать в себя все другие необходимые файлы (модули).
   entry: {
-    polyfill: 'babel-polyfill',
-    app: './js/app.js',
+    polyfill: "babel-polyfill",
+    app: "./js/app.js",
   },
   // Также webpack рекомендует явно указывать, в какой директории находятся исходные файлы проекта (ресурсы). Для этого следует использовать свойство context:
-  context: path.resolve(__dirname, 'src'),
+  context: path.resolve(__dirname, "src"),
   devServer: {
-    publicPath: '/',
+    publicPath: "/",
     port: 9000,
-    contentBase: path.join(process.cwd(), 'dist'),
-    host: 'localhost',
+    contentBase: path.join(process.cwd(), "dist"),
+    host: "localhost",
     historyApiFallback: true,
     noInfo: false,
-    stats: 'minimal',
+    stats: "minimal",
     hot: true,
   },
   module: {
@@ -29,9 +30,9 @@ module.exports = {
     rules: [
       {
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ["@babel/preset-env"],
           },
         },
         test: /\.js$/,
@@ -43,7 +44,7 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
 
             options: {
               importLoaders: 1,
@@ -51,7 +52,7 @@ module.exports = {
             },
           },
           {
-            loader: 'postcss-loader',
+            loader: "postcss-loader",
             options: {
               plugins: () => [precss, autoprefixer],
             },
@@ -62,9 +63,9 @@ module.exports = {
         test: /\.(png|jpe?g|gif)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              name: '[path][name].[ext]',
+              name: "[path][name].[ext]",
             },
           },
         ],
@@ -75,16 +76,17 @@ module.exports = {
   //Например, плагин для минификации кода (во время сборки код подвергается очистке и минификации).
   //Или плагин для сборки html страницы и css кода (скрипты вставляются в html, куски css собираются в один файл).
   plugins: [
-    new MiniCssExtractPlugin({ filename: './style.css' }),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({ filename: "./style.css" }),
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: "index.html",
     }),
   ],
   // Кроме entry, мы можем указать поле, куда (в какой файл) собирать конечный результат. Это свойство задаётся с помощью поля output.
   //По умолчанию, весь результирующий код собирается в папку dist.
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[hash].js',
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].[hash].js",
   },
-  mode: 'development',
+  mode: "development",
 };
